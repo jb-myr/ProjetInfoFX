@@ -20,6 +20,7 @@ import javafx.stage.Stage;
 public class App extends Application {
     private Canvas canvas;
     private GraphicsContext gc;
+    private double scale = 1.0;
     
     public static void main(String[] args) {
         launch(args);
@@ -32,17 +33,27 @@ public class App extends Application {
         canvas = new Canvas(400, 400);
         gc = canvas.getGraphicsContext2D();
 
-        Button button1 = new Button("Clear Canvas");
+        Button button1 = new Button("Suprimer");
         button1.setOnAction(e -> clearCanvas());
 
-        Button button2 = new Button("Add Points");
+        Button button2 = new Button("Creation de piece");
         button2.setOnAction(e -> openInputWindow());
+        
+        Button zoomInButton = new Button("Zoom In");
+        zoomInButton.setOnAction(e -> zoomCanvas(1.2));
+
+        Button zoomOutButton = new Button("Zoom Out");
+        zoomOutButton.setOnAction(e -> zoomCanvas(0.8));
 
         Button button3 = new Button("Button 3");
+        
+        HBox zoomButtons = new HBox(10, zoomInButton, zoomOutButton);
+        zoomButtons.setAlignment(Pos.CENTER);
+        VBox canvasWithZoom = new VBox(10, zoomButtons, canvas);
 
         VBox buttons = new VBox(10, button1, button2, button3);
         buttons.setAlignment(Pos.CENTER);
-        HBox root = new HBox(10, canvas, buttons);
+        HBox root = new HBox(10, canvasWithZoom, buttons);
         root.setPadding(new Insets(10));
 
         Scene scene = new Scene(root, 600, 450);
@@ -56,7 +67,7 @@ public class App extends Application {
 
     private void openInputWindow() {
         Stage inputStage = new Stage();
-        inputStage.setTitle("Enter Coordinates");
+        inputStage.setTitle("Enter les Coordonnes");
 
         GridPane grid = new GridPane();
         grid.setPadding(new Insets(10));
@@ -128,5 +139,17 @@ public class App extends Application {
         // il faut crée les coin avec les coords (x1, y1) etc et les murs
         
        
+    }
+    private void zoomCanvas(double factor) {
+        scale *= factor;
+        gc.scale(factor, factor);
+        redrawCanvas();
+    }
+
+    private void redrawCanvas() {
+        // Clear and redraw canvas content as needed (example with dots)
+        gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
+        // Add your redraw logic here if needed, for example:
+        // drawRectangle(...); // Call to a method that redraws the existing shapes
     }
 }
