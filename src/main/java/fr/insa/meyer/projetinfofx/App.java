@@ -55,10 +55,15 @@ public class App extends Application {
                 String[] parts = line.split(";");
                 if (parts.length >= 6) {
                     String optionName = parts[1];
-                    boolean includeInChoiceBox = parts[2].equals("1");
+                    boolean includeInChoiceBox = parts[4].equals("1");
                     if (includeInChoiceBox) {
                         options.add(optionName);
+                        System.out.println("Added: " + optionName);
+                    } else {
+                        System.out.println("Skipped: " + optionName);
                     }
+                } else {
+                    System.out.println("Invalid line: " + line);
                 }
             }
         } catch (IOException e) {
